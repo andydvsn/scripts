@@ -11,7 +11,7 @@ fi
 
 dest="$1"
 
-echo > "$dest/log.txt"
+rm "$dest/log.txt"
 
 for d in $(find "$dest" -mindepth 1 -maxdepth 1 -type d); do
 	echo $(date +'%Y-%m-%d-%H:%M:%S') : "$d" >> "$dest/log.txt"
