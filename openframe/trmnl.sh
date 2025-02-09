@@ -8,6 +8,7 @@ response=$(curl -s https://usetrmnl.com/api/display --header "access-token:$trmn
 image_url=$(echo "$response" | jq -r '.image_url')
 
 wget -q -O /tmp/trmnl.bmp "$image_url"
+convert /tmp/trmnl.bmp -negate /tmp/trmnl.bmp
 display -window root /tmp/trmnl.bmp
 
 exit 0
