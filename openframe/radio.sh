@@ -4,6 +4,9 @@
 ##  Streams the radio from a HDHomeRun and restarts it if there's a problem.
 ##  Use the accompanying radio.service file.
 
+hdhrip="192.168.11.103"
+channel="707"
+
 if [ -f /tmp/radio_restarts ]; then
 	restarts=$(cat /tmp/radio_restarts)
 	let restarts++
@@ -12,7 +15,20 @@ else
 	echo 0 > /tmp/radio_restarts
 fi
 
-mplayer -novideo -cache 1024 -cache-min 80 http://192.168.11.103:5004/auto/v707 &
+if [ -f /tmp/radio_channel ]; then
+	channel=$(cat /tmp/radio_channel)
+else
+	echo $channel > /tmp/radio_channel
+	chmod 666 /tmp/radio_channel
+fi
+
+mplayer -novideo -cache 1024 -cache-min 80 http://$hdhrip:5004/auto/v$channel &
+
+while inotifywait -e close_write /tmp/radio_channel; do
+
+	systemctl restart radio.service
+
+done &
 
 while true; do
 
