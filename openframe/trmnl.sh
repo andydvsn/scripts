@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
-## youtube.sh v0.01 (31st January 2025) by Andrew Davison
+## trmnl.sh v0.01 (8th February 2025) by Andrew Davison
 
-yt-dlp -f "bv*[height<=480]+ba" "$1" -o - | mplayer -
+source ~/.trmnl_key
+
+response=$(curl -s https://usetrmnl.com/api/display --header "access-token:$trmnl_key")
+image_url=$(echo "$response" | jq -r '.image_url')
+
+wget -q -O /tmp/trmnl.bmp "$image_url"
+convert /tmp/trmnl.bmp -negate /tmp/trmnl.bmp
+display -window root /tmp/trmnl.bmp
 
 exit 0
