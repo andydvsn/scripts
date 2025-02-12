@@ -7,6 +7,25 @@
 hdhrip="192.168.11.103"
 channel="707"
 
+# Handle play, pause and channel selection.
+if [ "$1" == "pause" ]; then
+	[ -f /tmp/radio_channel ] && cp /tmp/radio_channel /tmp/radio_paused
+	echo 0 > /tmp/radio_channel
+	exit 0
+elif [ "$1" == "play" ]; then
+	if [ -f /tmp/radio_paused ]; then
+		cp /tmp/radio_paused /tmp/radio_channel
+	else
+		echo $channel > /tmp/radio_channel
+	fi
+	exit 0
+elif [[ "$1" =~ ^[+-]?[0-9]+$ ]]; then
+	echo $1 > /tmp/radio_channel
+	exit 0
+elif [[ "$1" != "" ]]; then
+	exit 1
+fi
+
 # Keep an eye on our restart count.
 if [ -f /tmp/radio_restarts ]; then
 	restarts=$(cat /tmp/radio_restarts)
