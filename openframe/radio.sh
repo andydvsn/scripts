@@ -11,16 +11,20 @@ channel="707"
 if [ "$1" == "pause" ]; then
 	[ -f /tmp/radio_channel ] && cp /tmp/radio_channel /tmp/radio_paused
 	echo 0 > /tmp/radio_channel
+	chmod 666 /tmp/radio_channel
 	exit 0
 elif [ "$1" == "play" ]; then
 	if [ -f /tmp/radio_paused ]; then
 		cp /tmp/radio_paused /tmp/radio_channel
+		chmod 666 /tmp/radio_channel
 	else
 		echo $channel > /tmp/radio_channel
+		chmod 666 /tmp/radio_channel
 	fi
 	exit 0
 elif [[ "$1" =~ ^[+-]?[0-9]+$ ]]; then
 	echo $1 > /tmp/radio_channel
+	chmod 666 /tmp/radio_channel
 	exit 0
 elif [[ "$1" != "" ]]; then
 	exit 1
@@ -31,8 +35,10 @@ if [ -f /tmp/radio_restarts ]; then
 	restarts=$(cat /tmp/radio_restarts)
 	let restarts++
 	echo $restarts > /tmp/radio_restarts
+	chmod 666 /tmp/radio_restarts
 else
 	echo 0 > /tmp/radio_restarts
+	chmod 666 /tmp/radio_restarts
 fi
 
 # Set the channel from the file if present.
