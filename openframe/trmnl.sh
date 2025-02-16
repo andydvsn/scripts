@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-## trmnl.sh v0.02 (8th February 2025) by Andrew Davison
+## trmnl.sh v0.03 (16th February 2025) by Andrew Davison
 
-source ~/.trmnl_key2
+source ~/.trmnl_key
 
-response=$(curl -s https://usetrmnl.com/api/display --header "access-token:$trmnl_key" --header "fw-version:9.9.9")
+response=$(curl -s https://usetrmnl.com/api/display \
+	--header "access-token:$trmnl_key" \
+	--header "battery-voltage:3.83" \
+	--header "fw-version:6.9" \
+	--header "rssi:-69")
 image_url=$(echo "$response" | jq -r '.image_url')
 
 [ "$1" == "debug" ] && echo "$response" | jq
