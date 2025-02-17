@@ -67,7 +67,7 @@ while true; do
 	sleep 10
 	log=$(journalctl -n 6 -u radio.service)
 	
-	if [[ "$log" =~ "Cache empty" ]] || [[ "$log" =~ "Network is unreachable" ]]; then
+	if [[ "$log" =~ "Cache empty" ]] || [[ "$log" =~ "Network is unreachable" ]] || [[ "$log" =~ "No route" ]]; then
 		systemctl restart radio.service
 	fi
 
