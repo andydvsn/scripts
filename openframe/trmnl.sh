@@ -13,7 +13,6 @@ while true; do
 		--header "rssi:-69")
 	image_url=$(echo "$response" | jq -r '.image_url')
 	refresh_rate=$(echo "$response" | jq -r '.refresh_rate')
-	refresh_rate=$((refresh_rate + 10))
 
 	[ "$1" == "debug" ] && echo "$response" | jq
 
@@ -28,7 +27,9 @@ while true; do
 
 		elif which fbi > /dev/null 2>&1; then
 
+			pid=$(pgrep fbi)
 			fbi -vt 1 -noverbose /tmp/trmnl.bmp > /dev/null 2>&1
+			[ "$pid" != "" ] && sleep 1 && kill $pid
 
 		else
 
