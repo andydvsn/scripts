@@ -18,7 +18,7 @@ while true; do
 
 	if [ "$image_url" != "null" ]; then
 
-		wget -q -O /tmp/trmnl.bmp "$image_url"
+		wget -q -O /tmp/trmnl.bmp "$image_url" || rm /tmp/trmnl.bmp
 
 		if which display > /dev/null 2>&1; then
 
@@ -28,7 +28,7 @@ while true; do
 		elif which fbi > /dev/null 2>&1; then
 
 			pid=$(pgrep fbi)
-			fbi -vt 1 -noverbose /tmp/trmnl.bmp > /dev/null 2>&1
+			[ -f /tmp/trmnl.bmp ] && fbi -vt 1 -noverbose /tmp/trmnl.bmp > /dev/null 2>&1
 			[ "$pid" != "" ] && sleep 1 && kill $pid
 
 		else
@@ -46,7 +46,7 @@ while true; do
 
 	fi
 
-	[ "$1" == "debug" ] && break || sleep $refresh_rate
+	[ "$1" == "debug" ] && break || sleep $refresh_rate 2>/dev/null
 
 done
 
