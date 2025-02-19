@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## trmnl.sh v0.04 (19th February 2025) by Andrew Davison
+## trmnl.sh v0.05 (19th February 2025) by Andrew Davison
 
 source ~/.trmnl_key
 image="/home/$USER/scripts/openframe/trmnl/happy.png"
@@ -17,6 +17,7 @@ while true; do
 	refresh_rate=$(echo "$response" | jq -r '.refresh_rate')
 	[ "$refresh_rate" != "" ] || refresh_rate=6
 
+	# Chuck out some logging so we know what's happening.
 	[ "$1" == "debug" ] && echo "$response" | jq
 	echo "image_url = $image_url"
 	echo "refresh_rate = $refresh_rate"
@@ -41,7 +42,8 @@ while true; do
 
 	elif which fbi > /dev/null 2>&1; then
 
-		fbi -vt 1 -noverbose -t $refresh_rate -1 $image > /dev/null 2>&1 &
+		fbi -vt 1 -noverbose -t $refresh_rate -1 $image > /dev/null 2>&1
+		setterm --term xterm -clear -cursor off > /dev/tty1
 
 	else
 
