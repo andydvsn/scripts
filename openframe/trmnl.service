@@ -1,0 +1,14 @@
+[Unit]
+Description=TRMNL
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+User=of
+ExecStart=/home/of/scripts/openframe/trmnl.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
