@@ -1,44 +1,52 @@
 #!/usr/bin/env bash
 
-## trmnl.sh v0.03 (17th February 2025) by Andrew Davison
+## trmnl.sh v0.04 (19th February 2025) by Andrew Davison
 
 source ~/.trmnl_key
 
-response=$(curl -s https://usetrmnl.com/api/display \
-	--header "access-token:$trmnl_key" \
-	--header "battery-voltage:3.83" \
-	--header "fw-version:6.9" \
-	--header "rssi:-69")
-image_url=$(echo "$response" | jq -r '.image_url')
+while true; do
 
-[ "$1" == "debug" ] && echo "$response" | jq
+	response=$(curl -s https://usetrmnl.com/api/display \
+		--header "access-token:$trmnl_key" \
+		--header "battery-voltage:3.83" \
+		--header "fw-version:6.9" \
+		--header "rssi:-69")
+	image_url=$(echo "$response" | jq -r '.image_url')
+	refresh_rate=$(echo "$response" | jq -r '.refresh_rate')
+	refresh_rate=$((refresh_rate + 10))
 
-if [ "$image_url" != "null" ]; then
+	[ "$1" == "debug" ] && echo "$response" | jq
 
-	wget -q -O /tmp/trmnl.bmp "$image_url"
+	if [ "$image_url" != "null" ]; then
 
-	if which display > /dev/null 2>&1; then
+		wget -q -O /tmp/trmnl.bmp "$image_url"
 
-		#convert /tmp/trmnl.bmp -negate /tmp/trmnl.bmp
-		display -window root /tmp/trmnl.bmp
+		if which display > /dev/null 2>&1; then
 
-	elif which fbi > /dev/null 2>&1; then
+			#convert /tmp/trmnl.bmp -negate /tmp/trmnl.bmp
+			display -window root /tmp/trmnl.bmp
 
-		fbi -vt 1 -noverbose /tmp/trmnl.bmp > /dev/null 2>&1
+		elif which fbi > /dev/null 2>&1; then
+
+			fbi -vt 1 -noverbose /tmp/trmnl.bmp > /dev/null 2>&1
+
+		else
+
+			echo "No means to display the image. Please install fbi or imagemagick."
+			exit 1
+
+		fi
 
 	else
 
-		echo "No means to display the image. Please install fbi or imagemagick."
-		exit 1
+			[ "$1" != "debug" ] && echo "$response" | jq
+			echo "Failed to fetch image."
+			exit 1
 
 	fi
 
-else
+	[ "$1" == "debug" ] && break || sleep $refresh_rate
 
-		[ "$1" != "debug" ] && echo "$response" | jq
-		echo "Failed to fetch image."
-		exit 1
-
-fi
+done
 
 exit 0
