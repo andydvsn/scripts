@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## radio.sh v1.02 (13th February 2025)
+## radio.sh v1.03 (1st March 2025)
 ##  Streams the radio from a HDHomeRun and restarts it if there's a problem.
 ##  Use the accompanying radio.service file.
 
@@ -60,14 +60,14 @@ while inotifywait -e close_write $tmploc/channel; do
 
 done &
 
-mplayer -novideo -cache 512 -cache-min 80 http://$hdhrip:5004/auto/v$channel &
+mplayer -novideo -cache 512 -cache-min 80 -softvol -volume 50 http://$hdhrip:5004/auto/v$channel &
 
 while true; do
 
 	sleep 10
 	log=$(journalctl -n 6 -u radio.service)
 	
-	if [[ "$log" =~ "Cache empty" ]] || [[ "$log" =~ "Network is unreachable" ]] || [[ "$log" =~ "No route" ]]; then
+	if [[ "$log" =~ "Cache empty" ]] || [[ "$log" =~ "Network is unreachable" ]] || [[ "$log" =~ "No route" ]] || [[ "$log" =~ "Trying to reset soundcard" ]]; then
 		systemctl restart radio.service
 	fi
 
