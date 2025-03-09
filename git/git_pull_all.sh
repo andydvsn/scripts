@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# github_pull_all.sh
+# git_pull_all.sh
 #  Loop through the directories of a given path and update all repos.
 
 if [ $# -lt 1 ]; then
