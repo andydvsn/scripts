@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## radio.sh v1.07 (15th March 2026)
+## radio.sh v1.08 (16th March 2026)
 ##  Streams the radio from a HDHomeRun and restarts it if there's a problem.
 ##  Use the accompanying radio.service file.
 
@@ -20,7 +20,7 @@ fi
 # Handle play, pause and channel selection.
 if [ "$1" == "pause" ]; then
 	[ -f "$tmploc/channel" ] && cp "$tmploc/channel" "$tmploc/paused"
-	pkill -x mplayer
+	echo 0 > $tmploc/channel
 	exit 0
 elif [ "$1" == "play" ]; then
 	if [ -f "$tmploc/paused" ]; then
