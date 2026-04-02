@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-## acme.sh v0.01 (2nd April 2026) by Andrew Davison
+## anvil.sh v0.01 (2nd April 2026) by Andrew Davison
 
 # Usage:
-#   acme-auto.sh install <domain> <cf_account_id> <cf_token>
-#   acme-auto.sh remove <domain>
+#   anvil.sh install <domain> <cf_account_id> <cf_token>
+#   anvil.sh remove <domain>
 #
 # Run as the user who owns the acme.sh install.
 #
@@ -35,7 +35,7 @@ cmd_install() {
 	CF_TOKEN="$3"
 
 	echo "==> Ensuring passwordless sudo for $LOCAL_USER..."
-	SUDOERS_FILE="/etc/sudoers.d/$LOCAL_USER-acme"
+	SUDOERS_FILE="/etc/sudoers.d/98-$LOCAL_USER"
 	echo "$LOCAL_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee "$SUDOERS_FILE" > /dev/null
 	sudo chmod 440 "$SUDOERS_FILE"
 	echo "    Written: $SUDOERS_FILE"
