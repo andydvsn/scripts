@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-## anvil.sh v0.02 (2nd April 2026) by Andrew Davison
+## anvil.sh v0.03 (2nd April 2026) by Andrew Davison
 
 # Usage:
 #   anvil.sh install <domain> <cf_account_id> <cf_token>
@@ -24,6 +24,7 @@ usage() {
 }
 
 cmd_install() {
+
 	if [ "$#" -ne 3 ]; then
 		echo "Error: install requires 3 arguments"
 		usage
@@ -99,6 +100,7 @@ cmd_install() {
 }
 
 cmd_remove() {
+
 	if [ "$#" -ne 1 ]; then
 		echo "Error: remove requires 1 argument"
 		usage
@@ -116,7 +118,8 @@ cmd_remove() {
 	sudo rm -f "$SSL_DIR/$DOMAIN".*
 
 	echo ""
-	echo "Done! $DOMAIN has been removed."
+	"$ACME_SH" list
+
 }
 
 # ---- Entry point ----
