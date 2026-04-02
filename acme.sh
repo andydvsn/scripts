@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+## acme.sh v0.01 (2nd April 2026) by Andrew Davison
+
 # Usage:
 #   acme-auto.sh install <domain> <cf_account_id> <cf_token>
 #   acme-auto.sh remove <domain>
