@@ -65,11 +65,6 @@ cmd_install() {
 		--key-file '$SSL_DIR/$DOMAIN.key' \
 		--fullchain-file '$SSL_DIR/$DOMAIN.cer'"
 
-	echo ""
-	echo "Certificate installed to:"
-	echo "  Key:       $SSL_DIR/$DOMAIN.key"
-	echo "  Fullchain: $SSL_DIR/$DOMAIN.cer"
-
 	while true; do
 
 		echo "==> Testing Nginx config..."
@@ -78,8 +73,8 @@ cmd_install() {
 		fi
 
 		echo ""
-		echo "Update your Nginx config to reference these paths, then press Enter to test and reload."
-		read -rp "Press Enter to continue..." < /dev/tty
+		echo "Update your Nginx config to reference these paths, then press Enter to test again."
+		read -rp "Press Enter to continue..." < /dev/tty || true
 
 	done
 
