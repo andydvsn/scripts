@@ -42,7 +42,7 @@ cmd_install() {
 	export CF_Account_ID="$CF_ACCOUNT_ID"
 	export CF_Token="$CF_TOKEN"
 
-	"$ACME_SH" --issue \
+	"$ACME_SH" --force --issue \
 		-d "$DOMAIN" \
 		-d "*.$DOMAIN" \
 		--dns dns_cf \
