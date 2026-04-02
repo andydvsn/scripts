@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-## anvil.sh v0.01 (2nd April 2026) by Andrew Davison
+## anvil.sh v0.02 (2nd April 2026) by Andrew Davison
 
 # Usage:
 #   anvil.sh install <domain> <cf_account_id> <cf_token>
@@ -69,17 +69,20 @@ cmd_install() {
 
 	while true; do
 
+		echo ""
 		echo "==> Testing Nginx config..."
 		if sudo nginx -t; then
 			break
 		fi
 
 		echo ""
-		echo "Update your Nginx config to reference these paths, then press Enter to test again."
-		read -rp "Press Enter to continue..." < /dev/tty || true
+		echo "Update your Nginx config to use the key and fullchain paths above."
+		echo ""
+		read -rp "Press Enter to re-test..." < /dev/tty || true
 
 	done
 
+	echo ""
 	echo "==> Registering reload command and reloading Nginx..."
 	sg ssl-cert -c "'$ACME_SH' --install-cert \
 		-d '$DOMAIN' \
