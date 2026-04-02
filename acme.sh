@@ -63,6 +63,31 @@ cmd_install() {
 		-d '$DOMAIN' \
 		-d '*.$DOMAIN' \
 		--key-file '$SSL_DIR/$DOMAIN.key' \
+		--fullchain-file '$SSL_DIR/$DOMAIN.cer'"
+
+	echo ""
+	echo "Cert installed to:"
+	echo "  Key:       $SSL_DIR/$DOMAIN.key"
+	echo "  Fullchain: $SSL_DIR/$DOMAIN.cer"
+	echo ""
+	echo "Update your Nginx config to reference these paths, then press Enter to test and reload."
+	read -rp "Press Enter to continue..."
+
+	while true; do
+		echo "==> Testing Nginx config..."
+		if sudo nginx -t; then
+			break
+		fi
+		echo ""
+		echo "Fix your Nginx config and press Enter to test again."
+		read -rp "Press Enter to continue..."
+	done
+
+	echo "==> Registering reload command and reloading Nginx..."
+	sg ssl-cert -c "'$ACME_SH' --install-cert \
+		-d '$DOMAIN' \
+		-d '*.$DOMAIN' \
+		--key-file '$SSL_DIR/$DOMAIN.key' \
 		--fullchain-file '$SSL_DIR/$DOMAIN.cer' \
 		--reloadcmd 'sudo systemctl reload nginx'"
 
