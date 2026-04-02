@@ -40,6 +40,7 @@ cmd_install() {
 	sudo chmod 440 "$SUDOERS_FILE"
 	echo "    Written: $SUDOERS_FILE"
 
+	echo ""
 	echo "==> Issuing wildcard cert for $DOMAIN via Cloudflare DNS..."
 	export CF_Account_ID="$CF_ACCOUNT_ID"
 	export CF_Token="$CF_TOKEN"
@@ -60,7 +61,8 @@ cmd_install() {
 	sudo chown -R "root:ssl-cert" "$SSL_DIR"
 	sudo chmod -R 770 "$SSL_DIR"
 
-	echo "==> Installing cert to $SSL_DIR..."
+	echo ""
+	echo "==> Installing to $SSL_DIR..."
 	sg ssl-cert -c "'$ACME_SH' --install-cert \
 		-d '$DOMAIN' \
 		-d '*.$DOMAIN' \
@@ -91,8 +93,6 @@ cmd_install() {
 		--fullchain-file '$SSL_DIR/$DOMAIN.cer' \
 		--reloadcmd 'sudo systemctl reload nginx'"
 
-	echo ""
-	echo "Success!"
 	echo ""
 	echo "acme.sh will auto-renew via cron and reload nginx on renewal."
 }
