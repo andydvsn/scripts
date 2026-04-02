@@ -94,7 +94,8 @@ cmd_install() {
 		--reloadcmd 'sudo systemctl reload nginx'"
 
 	echo ""
-	echo "acme.sh will auto-renew via cron and reload nginx on renewal."
+	"$ACME_SH" list
+
 }
 
 cmd_remove() {
