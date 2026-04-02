@@ -12,7 +12,7 @@ set -euo pipefail
 #   curl https://get.acme.sh | sh -s email=you@example.com
 
 SSL_DIR="/etc/nginx/ssl"
-ACME_SH="$HOME/.acme.sh/acme.sh"
+ACME_SH="/home/$USER/.acme.sh/acme.sh"
 
 usage() {
 	echo "Usage:"
@@ -56,7 +56,7 @@ cmd_install() {
 	echo "==> Creating SSL directory $SSL_DIR..."
 	sudo mkdir -p "$SSL_DIR"
 	sudo chown -R "root:ssl-cert" "$SSL_DIR"
-	sudo chmod -R 750 "$SSL_DIR"
+	sudo chmod -R 770 "$SSL_DIR"
 
 	echo "==> Installing cert to $SSL_DIR..."
 	sg ssl-cert -c "'$ACME_SH' --install-cert \
