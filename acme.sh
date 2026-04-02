@@ -79,7 +79,7 @@ cmd_install() {
 
 		echo ""
 		echo "Update your Nginx config to reference these paths, then press Enter to test and reload."
-		read -rp "Press Enter to continue..."
+		read -rp "Press Enter to continue..." < /dev/tty
 
 	done
 
