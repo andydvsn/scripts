@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## update_yourls.sh v0.01 (30th August 2025)
+## yourls_update.sh v0.01 (30th August 2025)
 ##  Updates YOURLS
 
 if [ ! $# -eq 3 ]; then
