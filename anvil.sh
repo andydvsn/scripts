@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-## anvil.sh v0.03 (2nd April 2026) by Andrew Davison
+## anvil.sh v0.05 (2nd April 2026) by Andrew Davison
 
 # Usage:
 #   anvil.sh install <domain> <cf_account_id> <cf_token>
@@ -57,10 +57,12 @@ cmd_install() {
 	sudo groupadd -f ssl-cert
 	sudo usermod -aG ssl-cert "$LOCAL_USER"
 
-	echo "==> Creating SSL directory $SSL_DIR..."
+	echo "==> Ensuring SSL directory $SSL_DIR..."
 	sudo mkdir -p "$SSL_DIR"
+	sudo chmod 770 "$SSL_DIR"
 	sudo chown -R "root:ssl-cert" "$SSL_DIR"
-	sudo chmod -R 770 "$SSL_DIR"
+	sudo chmod 664 "$SSL_DIR"/*.cer
+	sudo chmod 660 "$SSL_DIR"/*.key
 
 	echo ""
 	echo "==> Installing to $SSL_DIR..."
