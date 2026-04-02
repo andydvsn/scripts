@@ -5,7 +5,7 @@ set -euo pipefail
 #   acme-auto.sh install <domain> <cf_account_id> <cf_token>
 #   acme-auto.sh remove <domain>
 #
-# Run as the user who owns the acme.sh install. local_username is derived from $USER.
+# Run as the user who owns the acme.sh install.
 #
 # Prerequisites:
 #   acme.sh must be installed before running this script:
@@ -32,7 +32,7 @@ cmd_install() {
 	CF_ACCOUNT_ID="$2"
 	CF_TOKEN="$3"
 
-	echo "==> Setting up passwordless sudo for $LOCAL_USER..."
+	echo "==> Ensuring passwordless sudo for $LOCAL_USER..."
 	SUDOERS_FILE="/etc/sudoers.d/$LOCAL_USER-acme"
 	echo "$LOCAL_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee "$SUDOERS_FILE" > /dev/null
 	sudo chmod 440 "$SUDOERS_FILE"
@@ -47,7 +47,7 @@ cmd_install() {
 		-d "*.$DOMAIN" \
 		--dns dns_cf \
 		--server letsencrypt \
-		--keylength ec-256
+		--keylength ec-384
 
 	echo "==> Setting up ssl-cert group..."
 	sudo groupadd -f ssl-cert
@@ -66,21 +66,21 @@ cmd_install() {
 		--fullchain-file '$SSL_DIR/$DOMAIN.cer'"
 
 	echo ""
-	echo "Cert installed to:"
+	echo "Certificate installed to:"
 	echo "  Key:       $SSL_DIR/$DOMAIN.key"
 	echo "  Fullchain: $SSL_DIR/$DOMAIN.cer"
-	echo ""
-	echo "Update your Nginx config to reference these paths, then press Enter to test and reload."
-	read -rp "Press Enter to continue..."
 
 	while true; do
+
 		echo "==> Testing Nginx config..."
 		if sudo nginx -t; then
 			break
 		fi
+
 		echo ""
-		echo "Fix your Nginx config and press Enter to test again."
+		echo "Update your Nginx config to reference these paths, then press Enter to test and reload."
 		read -rp "Press Enter to continue..."
+
 	done
 
 	echo "==> Registering reload command and reloading Nginx..."
@@ -92,9 +92,7 @@ cmd_install() {
 		--reloadcmd 'sudo systemctl reload nginx'"
 
 	echo ""
-	echo "Done! Cert installed to:"
-	echo "  Key:       $SSL_DIR/$DOMAIN.key"
-	echo "  Fullchain: $SSL_DIR/$DOMAIN.cer"
+	echo "Success!"
 	echo ""
 	echo "acme.sh will auto-renew via cron and reload nginx on renewal."
 }
