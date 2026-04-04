@@ -70,8 +70,8 @@ cmd_install() {
 		--key-file '$SSL_DIR/$DOMAIN.key' \
 		--fullchain-file '$SSL_DIR/$DOMAIN.cer'"
 
-	sudo chmod 664 "$SSL_DIR"/*.cer
-	sudo chmod 660 "$SSL_DIR"/*.key
+	sudo chmod 664 "$SSL_DIR/$DOMAIN.cer"
+	sudo chmod 660 "$SSL_DIR/$DOMAIN.key"
 
 	while true; do
 
