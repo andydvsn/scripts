@@ -62,6 +62,12 @@ cmd_install() {
 	sudo chmod 770 "$SSL_DIR"
 	sudo chown -R "root:ssl-cert" "$SSL_DIR"
 
+	echo "==> Preparing cert files in $SSL_DIR..."
+	sudo touch "$SSL_DIR/$DOMAIN.key" "$SSL_DIR/$DOMAIN.cer"
+	sudo chown root:ssl-cert "$SSL_DIR/$DOMAIN.key" "$SSL_DIR/$DOMAIN.cer"
+	sudo chmod 660 "$SSL_DIR/$DOMAIN.key"
+	sudo chmod 664 "$SSL_DIR/$DOMAIN.cer"
+
 	echo ""
 	echo "==> Installing to $SSL_DIR..."
 	sg ssl-cert -c "'$ACME_SH' --install-cert \
