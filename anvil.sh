@@ -61,8 +61,6 @@ cmd_install() {
 	sudo mkdir -p "$SSL_DIR"
 	sudo chmod 770 "$SSL_DIR"
 	sudo chown -R "root:ssl-cert" "$SSL_DIR"
-	sudo chmod 664 "$SSL_DIR"/*.cer
-	sudo chmod 660 "$SSL_DIR"/*.key
 
 	echo ""
 	echo "==> Installing to $SSL_DIR..."
@@ -71,6 +69,9 @@ cmd_install() {
 		-d '*.$DOMAIN' \
 		--key-file '$SSL_DIR/$DOMAIN.key' \
 		--fullchain-file '$SSL_DIR/$DOMAIN.cer'"
+
+	sudo chmod 664 "$SSL_DIR"/*.cer
+	sudo chmod 660 "$SSL_DIR"/*.key
 
 	while true; do
 
